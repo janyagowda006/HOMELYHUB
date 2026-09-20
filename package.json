@@ -1,0 +1,23 @@
+{
+  "name": "homelyhub",
+  "version": "1.0.0",
+  "description": "HomelyHub - Fullstack Accommodation and AI Trip Planner Platform",
+  "main": "backend/src/index.js",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix Frontend",
+    "build": "npm run build --prefix Frontend",
+    "start": "node backend/src/index.js",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix Frontend",
+    "dev": "node backend/src/index.js"
+  },
+  "keywords": [
+    "mern",
+    "homelyhub",
+    "accommodation",
+    "trip-planner",
+    "ai"
+  ],
+  "author": "",
+  "license": "ISC"
+}

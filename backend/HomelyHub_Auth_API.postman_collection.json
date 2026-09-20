@@ -1,0 +1,278 @@
+{
+  "info": {
+    "_postman_id": "homelyhub-auth-api-collection-2026",
+    "name": "HomelyHub Authentication & User API",
+    "description": "Complete Postman collection for testing HomelyHub authentication and user management APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check (Root)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1. Signup (Register New User)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.token) {",
+              "        pm.collectionVariables.set('token', jsonData.token);",
+              "        console.log('Token saved automatically:', jsonData.token);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"password123\",\n  \"passwordConfirm\": \"password123\",\n  \"phoneNumber\": \"9876543210\",\n  \"role\": \"user\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/signup",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "signup"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.token) {",
+              "        pm.collectionVariables.set('token', jsonData.token);",
+              "        console.log('Token saved automatically:', jsonData.token);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"johndoe@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Current User Profile (Protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "me"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update Profile (Protected)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"phoneNumber\": \"9123456780\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/updateMe",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "updateMe"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Update Password (Protected)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.token) {",
+              "        pm.collectionVariables.set('token', jsonData.token);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentPassword\": \"password123\",\n  \"password\": \"newpassword123\",\n  \"passwordConfirm\": \"newpassword123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/updateMyPassword",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "updateMyPassword"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Forgot Password (Send Reset Email)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"johndoe@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/forgotPassword",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "forgotPassword"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Reset Password (With Token from Email)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.token) {",
+              "        pm.collectionVariables.set('token', jsonData.token);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"password\": \"brandnewpassword123\",\n  \"passwordConfirm\": \"brandnewpassword123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/resetPassword/:token",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "resetPassword", ":token"],
+          "variable": [
+            {
+              "key": "token",
+              "value": "PASTE_RESET_TOKEN_HERE"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Logout",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/users/logout",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "users", "logout"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
